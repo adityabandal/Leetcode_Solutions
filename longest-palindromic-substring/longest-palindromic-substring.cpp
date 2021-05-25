@@ -19,11 +19,9 @@ public:
                 lo--;
                 hi++;
             }
-        }
-        
-        for(int i=0;i<n-1;i++){
-            int lo = i;
-            int hi = i+1;
+            
+            lo = i;
+            hi = i+1;
             
             while(lo>=0 && hi<n && s[lo]==s[hi]){
                 if(hi-lo+1>ans.size()){
@@ -33,6 +31,19 @@ public:
                 hi++;
             }
         }
+        
+//         for(int i=0;i<n-1;i++){
+//             int lo = i;
+//             int hi = i+1;
+            
+//             while(lo>=0 && hi<n && s[lo]==s[hi]){
+//                 if(hi-lo+1>ans.size()){
+//                     ans = s.substr(lo, hi-lo+1);
+//                 }
+//                 lo--;
+//                 hi++;
+//             }
+//         }
         
         
         return ans;
