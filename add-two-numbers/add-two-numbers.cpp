@@ -18,7 +18,7 @@ public:
         while(l1 && l2){
             d = (l1->val+l2->val+c)%10;
             c = (l1->val+l2->val+c)/10;
-            cout<<c<<endl;
+            // cout<<c<<endl;
             ListNode *newNode = new ListNode(d);
             tail->next = newNode;
             tail = tail->next;
