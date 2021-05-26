@@ -8,28 +8,12 @@ public:
     }
     
     void addNum(int num) {
-        if(l.size() == 0){
-            l.push(num);
-        }
-        else if(l.size() > r.size()){
-            if(num <= l.top()){
-                l.push(num);
-                r.push(l.top());
-                l.pop();
-            }
-            else{
-                r.push(num);
-            }
-        }
-        else{
-            if(num <= l.top()){
-                l.push(num);
-            }
-            else{
-                r.push(num);
-                l.push(r.top());
-                r.pop();
-            }
+        l.push(num);
+        r.push(l.top());
+        l.pop();
+        if(l.size() < r.size()){
+            l.push(r.top());
+            r.pop();
         }
     }
     
