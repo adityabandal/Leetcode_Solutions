@@ -1,36 +1,23 @@
-#define all(nums) nums.begin(), nums.end()
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
-        int n = nums.size();
-        sort(all(nums));
-        if(n<=2) return {};
-        int target = 0;
         vector<vector<int>> ans;
-        
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
         for(int i=0;i<n;i++){
-            int lo = i+1;
-            int hi = n-1;
-            if(i>0 && nums[i] == nums[i-1]) continue;
-            while(lo<hi){
-                int sum = nums[i] +nums[lo]+nums[hi];
-                
-                if(sum == target){
-                    ans.push_back({nums[i], nums[lo], nums[hi]});
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            int target = -nums[i];
+            unordered_set<int> s;
+            for(int j=i+1;j<n;j++){
+                // if(j!=i+1 && nums[j] == nums[j-1]) continue;
+                if(s.find(target-nums[j])!=s.end()){
+                    ans.push_back({nums[i], nums[j], -nums[i]-nums[j]});
+                    while(j+1<n && nums[j+1]==nums[j]) j++;
                     
-                    lo++;
-                    hi--;
-                    while(lo<n && nums[lo]==nums[lo-1]) lo++;
                 }
-                else if(sum>target){
-                    hi--;
-                }
-                else{
-                    lo++;
-                }
+                s.insert(nums[j]);
             }
         }
-        
         return ans;
     }
 };
