@@ -1,36 +1,32 @@
 class LRUCache {
 public:
-    int cap;
-    list<int> dq;
+    list<int> lst;
     unordered_map<int, pair<int, list<int>::iterator>> cache;
+    int sz;
     LRUCache(int capacity) {
-        cap = capacity;
+        sz = capacity;
     }
     
     int get(int key) {
-        if(cache.find(key)!=cache.end()){
-            dq.erase(cache[key].second);
-            dq.push_front(key);
-            cache[key] = {cache[key].first, dq.begin()};
-            return cache[key].first;
-        }
-        else
-            return -1;
+        if(cache.find(key)==cache.end()) return -1;
+        
+        lst.erase(cache[key].second);
+        lst.push_front(key);
+        cache[key] = {cache[key].first, lst.begin()};
+        
+        return cache[key].first;
     }
     
     void put(int key, int value) {
         if(cache.find(key)!=cache.end()){
-            // cout<<"update "<<key<<endl;
-            dq.erase(cache[key].second);
+            lst.erase(cache[key].second);
         }
-        else if(dq.size()==cap){
-            cache.erase(dq.back());
-            // cout<<"erased "<<dq.back()<<endl;
-            dq.pop_back();
+        else if(lst.size() == sz){
+            cache.erase(lst.back());
+            lst.pop_back();
         }
-        // cout<<"add "<<key<<endl;
-        dq.push_front(key);
-        cache[key] = {value, dq.begin()};
+        lst.push_front(key);
+        cache[key] = {value, lst.begin()};
         
     }
 };
