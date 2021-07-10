@@ -1,23 +1,40 @@
-#define iterator vector<vector<int>>::iterator
 class Solution {
-public:
-    void sort_count(iterator l, iterator r, vector<int>& count) {
-        if (r - l <= 1) return;
-        iterator m = l + (r - l) / 2;
-        sort_count(l, m, count);
-        sort_count(m, r, count);
-        for (iterator i = l, j = m; i < m; i++) {
-            while (j < r && (*i)[0] > (*j)[0]) j++;
-            count[(*i)[1]] += j - m; // add the number of valid "j"s to the indices of *i
+protected:
+    void merge_countSmaller(vector<int>& indices, int first, int last, 
+                            vector<int>& results, vector<int>& nums) {
+        int count = last - first;
+        if (count > 1) {
+            int step = count / 2;
+            int mid = first + step;
+            merge_countSmaller(indices, first, mid, results, nums);
+            merge_countSmaller(indices, mid, last, results, nums);
+            vector<int> tmp;
+            tmp.reserve(count);
+            int idx1 = first;
+            int idx2 = mid;
+            int semicount = 0;
+            while ((idx1 < mid) || (idx2 < last)) {
+                if ((idx2 == last) || ((idx1 < mid) &&
+                       (nums[indices[idx1]] <= nums[indices[idx2]]))) {
+					tmp.push_back(indices[idx1]);
+                    results[indices[idx1]] += semicount;
+                    ++idx1;
+                } else {
+					tmp.push_back(indices[idx2]);
+                    ++semicount;
+                    ++idx2;
+                }
+            }
+            move(tmp.begin(), tmp.end(), indices.begin()+first);
         }
-        inplace_merge(l, m, r);
     }
+public:
     vector<int> countSmaller(vector<int>& nums) {
-        vector<vector<int>> hold;
         int n = nums.size();
-        for (int i = 0; i < n; ++i) hold.push_back(vector<int>({nums[i], i})); // "zip" the nums with their indices
-        vector<int> count(n, 0);
-        sort_count(hold.begin(), hold.end(), count);
-        return count;
+        vector<int> results(n, 0);
+        vector<int> indices(n, 0);
+        iota(indices.begin(), indices.end(), 0);
+        merge_countSmaller(indices, 0, n, results, nums);
+        return results;
     }
 };
