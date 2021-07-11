@@ -18,12 +18,7 @@ public:
     }
     
     double findMedian() {
-        if(l.size()==r.size() && l.size()>0){
-            return (((double)l.top()+(double)r.top())/2);
-        }
-        else{
-            return l.top();
-        }
+        return l.size()>r.size()?l.top():(l.top()+r.top())/2.0;
     }
 };
 
