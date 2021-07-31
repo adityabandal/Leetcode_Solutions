@@ -1,13 +1,6 @@
 class Solution {
 public:
-    void printv(vector<int> arr,string name="", int n=-1){
-        cout<<name<<" ";
-        if(n==-1)n=arr.size();
-        for(int i=0;i<n;i++){
-            cout<<arr[i]<<" ";
-        }
-        cout<<endl;
-    }
+    
     int trap(vector<int>& height) {
         int n = height.size();
         if(n<=1) return 0;
