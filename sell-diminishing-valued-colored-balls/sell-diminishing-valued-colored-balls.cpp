@@ -1,54 +1,48 @@
-#define M 1000000007
-#define ll long long int
+#define ll unsigned long long
 class Solution {
 public:
-    bool valid(vector<int>& inv, int ord, int k){
+    ll items(vector<int>& sup, int k){
         ll tot = 0;
-        for(int i=0;i<inv.size();i++){
-            if(inv[i]>=k){
-                tot += inv[i]-k+1;
-                if(tot>=ord) return true;
+        for(int i=0;i<sup.size();i++){
+            if(sup[i]>=k){
+                tot += (sup[i]-k+1);
             }
         }
-        return tot>=ord;
-    }
-    int maxv(const vector<int>& arr){
-        int mx = INT_MIN;
-        for(int a:arr){
-            mx = max(mx, a);
-        }
-        return mx;
+        return tot;
     }
     ll sum(ll n, ll m){
         return (n*(n+1)/2)-(m*(m+1)/2);
     }
-    int maxProfit(vector<int>& inv, int ord) {
-        ll lo = 1;
-        ll hi = maxv(inv);
-        int k = INT_MAX;
+    int maxProfit(vector<int>& sup, int orders) {
+        int mx = 0;
+        int M = 1e9+7;
+        int n = sup.size();
+        for(int i=0;i<n;i++){
+            mx = max(mx, sup[i]);
+        }
+
+        int lo=0, hi = mx;
+        int thresh = 0;
         while(lo<=hi){
-            ll mid = lo+(hi-lo)/2;
-            
-            if(valid(inv, ord, mid)){
-                k = mid;
-                lo = mid+1;
+            int mid = lo+(hi-lo)/2;
+            if(items(sup, mid)<=orders){
+                thresh = mid;
+                hi = mid-1;
             }
             else{
-                hi = mid-1;
+                lo = mid+1;
             }
         }
         ll ans = 0;
-        for(int i=0;i<inv.size();i++){
-            if(inv[i]>k){
-                ord -= inv[i]-k;
-                ans = (ans+sum(inv[i],k))%M;
+        for(int i=0;i<n;i++){
+            if(sup[i]>=thresh){
+                ans = (ans+sum(sup[i], thresh-1)%M)%M;
+                orders -= (sup[i]-thresh+1);
             }
-            
         }
-        if(ord){
-            ans =  (ans+((ll)ord*(ll)k)%M)%M;
+        if(orders){
+            ans = (ans+(ll)orders*(thresh-1)%M);
         }
-        // cout<<endl;
         return ans%M;
     }
 };
